@@ -1,31 +1,32 @@
-workflow:
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+name: CI
 
-stages:
-  - build
-  - read
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
 
-build:
-  stage: build
-  image: ubuntu:latest
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-  before_script:
-    - apt-get update -y
-    - apt-get install -y git
+    steps:
+      - uses: actions/checkout@v4
 
-  script:
-    - echo "Hello, world!"
-    - ls -laRt
+      - name: Run a one-line script
+        run: echo "Hello, world!"
 
-reading-files:
-  stage: read
-  image: ubuntu:latest
+      - name: Run a multi-line script
+        run: ls -laRt
 
-  before_script:
-    - apt-get update -y
-    - apt-get install -y git
+  reading-files:
+    runs-on: ubuntu-latest
 
-  script:
-    - echo "Hello, world! push"
-    - cat testing.txt
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run a one-line script
+        run: echo "Hello, world! push"
+
+      - name: Read testing.txt
+        run: cat testing.txt
